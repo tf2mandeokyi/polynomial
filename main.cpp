@@ -5,8 +5,8 @@
 #include <math.h>
 #include <float.h>
 #include <functional>
-// C¿Í C++ÀÇ Â«»Í
-// À¸ ±ØÇø
+// Cì™€ C++ì˜ ì§¬ë½•
+// ìœ¼ ê·¹í˜
 
 
 void printDecimal(double decimal)
@@ -80,7 +80,7 @@ int main()
 	scanf("%d", &N);
 	if(N == 1)
 	{
-		printf("2°³ ÀÌ»óÀÇ Á¡ÀÌ ÇÊ¿äÇÕ´Ï´Ù.");
+		printf("2ê°œ ì´ìƒì˜ ì ì´ í•„ìš”í•©ë‹ˆë‹¤.");
 		return 0;
 	}
 	
@@ -95,7 +95,7 @@ int main()
 		{
 			if(x_array[i] == x_array[j])
 			{
-				printf("2°³ ÀÌ»óÀÇ Á¡ÀÇ x ÁÂÇ¥°¡ °°½À´Ï´Ù.");
+				printf("2ê°œ ì´ìƒì˜ ì ì˜ x ì¢Œí‘œê°€ ê°™ìŠµë‹ˆë‹¤.");
 			}
 		}
 	}
@@ -149,7 +149,7 @@ int main()
 	// ---------------- Plotting the function ----------------
 	
 	AsciiCanvas::Graph g(
-		100, 60, 
+		50, 30, 
 		xmin - xsize * 0.1, ymin - ysize * 0.1, 
 		xmax + xsize * 0.1, ymax + ysize * 0.1
 	);
