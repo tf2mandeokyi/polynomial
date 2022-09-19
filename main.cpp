@@ -5,8 +5,15 @@
 #include <math.h>
 #include <float.h>
 #include <functional>
-// C와 C++의 짬뽕
-// 으 극혐
+
+#include <windows.h>
+
+
+#pragma execution_character_set( "utf-8" )
+
+
+int WIDTH = 50;
+int HEIGHT = 30;
 
 
 void printDecimal(double decimal)
@@ -65,7 +72,7 @@ void plotCoefficients(
 	std::function<double(double)> func
 )
 {
-	graph.plot_yfx(func, 0.1);
+	graph.plot_yfx(func, 0.7);
 	graph.plot_fxy0(make_xyfunc(x), 0.3);
 	graph.plot_fxy0(make_xyfunc(y), 0.3);
 }
@@ -74,14 +81,17 @@ void plotCoefficients(
 
 int main()
 {
+	SetConsoleOutputCP( 65001 );
+
 	// ---------------- Input coordinate count ---------------- 
 	
-	int N, i;
-	scanf("%d", &N);
-	if(N == 1)
+	int N = 0, i;
+	printf("점의 개수를 입력해주세요: ");
+	while(N < 2)
 	{
-		printf("2개 이상의 점이 필요합니다.");
-		return 0;
+		scanf("%d", &N);
+		if(N >= 2) break;
+		printf("점의 개수는 2 이상이어야 합니다. ");
 	}
 	
 	
@@ -90,14 +100,19 @@ int main()
 	double x_array[N], y_array[N];
 	for(int i = 0; i < N; ++i)
 	{
-		scanf("%lf%lf", x_array+i, y_array+i);
+		input_x:
+		printf("\nx_%d: ", i + 1);
+		scanf("%lf", x_array+i);
 		for(int j = 0; j < i; ++j)
 		{
 			if(x_array[i] == x_array[j])
 			{
-				printf("2개 이상의 점의 x 좌표가 같습니다.");
+				printf("x 좌표가 겹치는 점이 있습니다.");
+				goto input_x;
 			}
 		}
+		printf("y_%d: ", i + 1);
+		scanf("%lf", y_array+i);
 	}
 	
 	
@@ -114,6 +129,7 @@ int main()
 	
 	// ---------------- Calculate coefficients & function ---------------- 
 	
+	printf("\n계수 계산 중...\n");
 	double* coefficients = getCoefficients(N, x_array, y_array);
 	auto function = [&N, &coefficients](double x)
 	{
@@ -133,25 +149,19 @@ int main()
 	{
 		double x = xmin + (xmax - xmin) * i / 20.0;
 		double y = function(x);
-		if(y_array[i] > ymax) ymax = y_array[i];
-		if(y_array[i] < ymin) ymin = y_array[i];
+		if(y > ymax) ymax = y;
+		if(y < ymin) ymin = y;
 	}
 	double ysize = ymax - ymin;
 	
 	
-	// ---------------- Printing the function ----------------
-	
-	printf(" => f(x) = ");
-	printPolynomial(N, coefficients);
-	printf("\n");
-	
-	
 	// ---------------- Plotting the function ----------------
 	
+	printf("그래프 그리는 중...\n");
 	AsciiCanvas::Graph g(
-		50, 30, 
-		xmin - xsize * 0.1, ymin - ysize * 0.1, 
-		xmax + xsize * 0.1, ymax + ysize * 0.1
+		WIDTH, HEIGHT, 
+		xmin - xsize * 0.3, ymin - ysize * 0.2, 
+		xmax + xsize * 0.3, ymax + ysize * 0.2
 	);
 	plotCoefficients(g, function);
 	
@@ -162,6 +172,13 @@ int main()
 	{
 		g.plot_point(x_array[i], y_array[i], 1);
 	}
+	
+	
+	// ---------------- Printing the function ----------------
+	
+	printf(" => f(x) = ");
+	printPolynomial(N, coefficients);
+	printf("\n");
 	
 	
 	// ---------------- Printing the graph ----------------
